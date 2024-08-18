@@ -71,4 +71,4 @@ Build/*/**
 # Built data for maps
 *_BuiltData.uasset
 
-*.sln
+*.vsconfig
