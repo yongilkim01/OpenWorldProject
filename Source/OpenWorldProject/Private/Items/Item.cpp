@@ -9,23 +9,35 @@
 AItem::AItem()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	ItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
+	RootComponent = ItemMesh;
 }
 
 void AItem::BeginPlay()
 {
 	Super::BeginPlay();
+}
 
-	UWorld* World = GetWorld();
-	FVector Location = GetActorLocation();
-	FVector Forward = GetActorForwardVector();
+float AItem::TransformedSin()
+{
+	return Amplitude * FMath::Sin(RunningTime * TimeConstant);
+}
 
-	DRAW_SPHERE(Location);
-	DRAW_VECTOR(Location, Location + Forward * 100.f);
+float AItem::TransformedCos()
+{
+	return Amplitude * FMath::Cos(RunningTime * TimeConstant);
+}
+
+template<typename T>
+inline T AItem::Avg(T First, T Second)
+{
+	return (First + Second) / 2;
 }
 
 void AItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	RunningTime += DeltaTime;
 
 }
 
