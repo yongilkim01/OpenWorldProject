@@ -27,6 +27,7 @@ protected:
 	void MoveRight(float Value);
 	void Turn(float Value);
 	void LookUp(float Value);
+	virtual void Jump() override;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -35,9 +36,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
 
-	UPROPERTY(VisibleAnywhere, Category = "Hair")
-	UGroomComponent* Hair;	
+	//UPROPERTY(VisibleAnywhere, Category = "Hair")
+	//UGroomComponent* Hair;	
 	
-	UPROPERTY(VisibleAnywhere, Category = "Hair")
-	UGroomComponent* Eyebrows;
+	//UPROPERTY(VisibleAnywhere, Category = "Hair")
+	//UGroomComponent* Eyebrows;
 };

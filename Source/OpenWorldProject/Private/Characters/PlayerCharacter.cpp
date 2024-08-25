@@ -28,13 +28,13 @@ APlayerCharacter::APlayerCharacter()
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(SpringArm);
 
-	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
-	Hair->SetupAttachment(GetMesh());
-	Hair->AttachmentName = FString("head");
+	//Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
+	//Hair->SetupAttachment(GetMesh());
+	//Hair->AttachmentName = FString("head");
 
-	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
-	Eyebrows->SetupAttachment(GetMesh());
-	Eyebrows->AttachmentName = FString("head");
+	//Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
+	//Eyebrows->SetupAttachment(GetMesh());
+	//Eyebrows->AttachmentName = FString("head");
 
 }
 
@@ -77,6 +77,12 @@ void APlayerCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+void APlayerCharacter::Jump()
+{
+	//bPressedJump = true;
+	//JumpKeyHoldTime = 0.0f;
+}
+
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -90,5 +96,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(FName("Turn"), this, &APlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis(FName("LookUp"), this, &APlayerCharacter::LookUp);
+
+	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &APlayerCharacter::Jump);
+	ACharacter::Jump();
 }
 
