@@ -2,6 +2,8 @@
 
 
 #include "Characters/PlayerCharacter.h"
+#include "Items/Item.h"
+#include "Items/Weapons/Weapon.h"
 
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -77,10 +79,14 @@ void APlayerCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
-void APlayerCharacter::Jump()
+void APlayerCharacter::EKeyPressed()
 {
-	//bPressedJump = true;
-	//JumpKeyHoldTime = 0.0f;
+	AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingIterm);
+	if (OverlappingWeapon)
+	{
+		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
+		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+	}
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -96,8 +102,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(FName("Turn"), this, &APlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis(FName("LookUp"), this, &APlayerCharacter::LookUp);
-
-	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &APlayerCharacter::Jump);
-	ACharacter::Jump();
+	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(FName("Equip"), IE_Pressed, this, &APlayerCharacter::EKeyPressed);
 }
 
