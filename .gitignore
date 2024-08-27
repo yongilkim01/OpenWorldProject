@@ -5,7 +5,8 @@ DerivedDataCache/*
 Content/*
 Binaries/*
 Platforms/*
-
+Assets/*
+Saved/*
 # Visual Studio 2015 user specific files
 .vs
 
