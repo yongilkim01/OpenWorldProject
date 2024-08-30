@@ -45,7 +45,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::GetHit(const FVector& Location)
+void AEnemy::GetHit_Implementation(const FVector& Location)
 {
 	//DRAW_SPHERE_COLOR(Location, FColor::Orange);
 

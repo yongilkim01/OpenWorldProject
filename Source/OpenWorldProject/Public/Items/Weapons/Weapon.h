@@ -31,6 +31,9 @@ protected: // class method
 	UFUNCTION()
 	void OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateField(const FVector& FieldLocation);
+
 public: // Get Set
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 
