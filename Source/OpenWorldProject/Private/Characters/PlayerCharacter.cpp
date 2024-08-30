@@ -178,7 +178,7 @@ bool APlayerCharacter::CanAttack()
 	return ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
 }
 
-void APlayerCharacter::PlayEquipMontage(FName SectionName)
+void APlayerCharacter::PlayEquipMontage(const FName& SectionName)
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && EquipMontage)
