@@ -61,6 +61,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Sphere;
 
+	UPROPERTY(EditAnywhere)
+	class UNiagaraComponent* EmbersEffect;
+
 	EItemState ItemState = EItemState::EIS_Hovering;
 
 };
