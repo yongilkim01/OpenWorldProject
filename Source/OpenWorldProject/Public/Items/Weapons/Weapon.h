@@ -19,7 +19,7 @@ class OPENWORLDPROJECT_API AWeapon : public AItem
 public:
 	AWeapon();
 
-	void Equip(USceneComponent*, FName);
+	void Equip(USceneComponent*, FName, AActor*, APawn*);
 	void AttachMeshToSocket(USceneComponent* Inparent, const FName& InsocketName);
 
 protected: // class method
@@ -36,6 +36,8 @@ protected: // class method
 
 public: // Get Set
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
+	FORCEINLINE float GetDamage() const { return Damage; }
+	FORCEINLINE void SetDamage(float ChangeDamage) { Damage = ChangeDamage; }
 
 private: // private variable
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
@@ -49,6 +51,9 @@ private: // private variable
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	float Damage = 20.f;
 
 public: // public variable
 	TArray<AActor*> IgnoreActors;
