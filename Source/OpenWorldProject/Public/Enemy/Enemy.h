@@ -6,6 +6,8 @@
 #include "Enemy.generated.h"
 
 class UAnimMontage;
+class UAttributeComponent;
+class UHealthBarComponent;
 
 UCLASS()
 class OPENWORLDPROJECT_API AEnemy : public ACharacter, public IHitInterface
@@ -35,5 +37,11 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = VisualEffects)
 	UParticleSystem* HitParticles;
+
+	UPROPERTY(VisibleAnywhere)
+	UAttributeComponent* Attributes;
+
+	UPROPERTY(VisibleAnywhere)
+	UHealthBarComponent* HealthBarWidget;
 
 };
