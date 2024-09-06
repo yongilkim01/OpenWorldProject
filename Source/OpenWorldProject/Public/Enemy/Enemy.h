@@ -35,6 +35,9 @@ protected:
 	void MoveToTarget(AActor* Target);
 	AActor* SelectPatrolTarget();
 
+	UFUNCTION()
+	void SeePawn(APawn* SeenPawn);
+
 private:
 	void PatrolTimerFinished();
 
@@ -68,7 +71,7 @@ private:
 
 	// Patrol variables
 
-	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+	UPROPERTY(EditInstanceOnly, Category = "AI Navigation", BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	AActor* PatrolTarget;
 
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
@@ -76,6 +79,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	double PatrolRadius = 200.f;
+
+	// Attack variables
+	UPROPERTY(EditAnywhere)
+	double AttackRadius = 150.f;
 
 	FTimerHandle PatrolTimer;
 
@@ -86,9 +93,14 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float WaitMax = 10.f;
 
+	UPROPERTY(VisibleAnywhere)
+	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+
 	UPROPERTY()
 	class AAIController* EnemyController;
 
+	UPROPERTY(VisibleAnywhere)
+	class UPawnSensingComponent* PawnSensingComponent;
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	EDeathPose DeathPose = EDeathPose::EDP_Alive;
