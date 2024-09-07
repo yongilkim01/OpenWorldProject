@@ -1,17 +1,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "Interfaces/HitInterface.h"
+#include "Characters/BaseCharacter.h"
 #include "Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
-class UAnimMontage;
-class UAttributeComponent;
+class UInputComponent;
 class UHealthBarComponent;
-
+class UPawnSensingComponent;
+class AWeapon;
 UCLASS()
-class OPENWORLDPROJECT_API AEnemy : public ACharacter, public IHitInterface
+class OPENWORLDPROJECT_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -21,16 +20,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void CheckPatrolTarget();
 	void CheckCombatTarget();
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
-	void DirectionalHitReact(const FVector& Location);
-
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Destroyed() override;
+	virtual bool CanAttack() override;
+
 protected:
 	virtual void BeginPlay() override;
-	void Die();
-	void PlayHitMontage(const FName& SectionName);
+	virtual void Die() override;
+	virtual void Attack() override;
+	virtual void PlayAttackMontage() override;
+	virtual void HandleDamage(float DamageAmount) override;
+
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
 	AActor* SelectPatrolTarget();
@@ -41,22 +43,29 @@ protected:
 private:
 	void PatrolTimerFinished();
 
+	/** AI behavior */
+	void HideHealthBar();
+	void ShowHealthBar();
+	void LoseInterest();
+	void StartPatrolling();
+	void ChaseTarget();
+	bool IsOutsideCombatRadius();
+	bool IsOutsideAttackRadius();
+	bool IsInsideAttackRadius();
+	bool IsChasing();
+	bool IsAttacking();
+	bool IsDead();
+	bool IsEngaged();
+	void ClearPatrolTimer();
+
+	/** Combat */
+	void StartAttackTimer();
+	void ClearAttackTimer();
+
+
 private:
-	// Animation montages variable
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* HitReactMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* DeathMontage;
-
-	UPROPERTY(EditAnywhere, Category = Sounds)
-	USoundBase* HitSound;
-
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-	UParticleSystem* HitParticles;
-
-	UPROPERTY(VisibleAnywhere)
-	UAttributeComponent* Attributes;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> WeaponClass;
 
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
@@ -93,16 +102,33 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float WaitMax = 10.f;
 
-	UPROPERTY(VisibleAnywhere)
-	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
-
 	UPROPERTY()
 	class AAIController* EnemyController;
 
 	UPROPERTY(VisibleAnywhere)
 	class UPawnSensingComponent* PawnSensingComponent;
+
+	FTimerHandle AttackTimer;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float AttackMin = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float AttackMax = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float PatrollingSpeed = 125.f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float ChasingSpeed = 300.f;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	EDeathPose DeathPose = EDeathPose::EDP_Alive;
+	EDeathPose DeathPose;
 
+	UPROPERTY(BlueprintReadOnly)
+	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float DeathLifeSpan = 8.f;
 };

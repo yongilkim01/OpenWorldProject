@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Characters/BaseCharacter.h"
 #include "CharacterTypes.h"
 #include "PlayerCharacter.generated.h"
 
@@ -11,11 +11,9 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
-class AWeapon;
-class UAnimMontage;
 
 UCLASS()
-class OPENWORLDPROJECT_API APlayerCharacter : public ACharacter
+class OPENWORLDPROJECT_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -24,9 +22,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 
 public:
 	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
@@ -41,13 +36,11 @@ protected:
 	void Turn(float Value);
 	void LookUp(float Value);
 	void EKeyPressed();
-	void Attack();
+	virtual void Attack() override;
 
 	// Montage method
-	void PlayAttackMontage();
-
-	UFUNCTION(BlueprintCallable)
-	void AttackEnd();
+	virtual void PlayAttackMontage() override;
+	virtual void AttackEnd() override;
 
 	UFUNCTION(BLueprintCallable)
 	void Disarm();
@@ -59,9 +52,10 @@ protected:
 	void FinishEquipping();
 
 	void PlayEquipMontage(const FName& SectionName);
+
+	virtual bool CanAttack() override;
 	bool CanDisarm();
 	bool CanArm();
-	bool CanAttack();
 
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
@@ -78,21 +72,9 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 
-	UPROPERTY(VisibleAnywhere, Category = Weapon)
-	AWeapon* EquippedWeapon;
-
 	// Animation montages variable
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* AttackMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* EquipMontage;
-
-	//UPROPERTY(VisibleAnywhere, Category = "Hair")
-	//UGroomComponent* Hair;	
-	
-	//UPROPERTY(VisibleAnywhere, Category = "Hair")
-	//UGroomComponent* Eyebrows;
 
 public:
 
