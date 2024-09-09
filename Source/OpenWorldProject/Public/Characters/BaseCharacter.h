@@ -29,12 +29,25 @@ protected:
 	virtual void Attack();
 	virtual void Die();
 
-	virtual void PlayAttackMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 	void DirectionalHitReact(const FVector& Location);
 	void PlayHitSound(const FVector& ImpactPoint);
 	void SpawnHitParticles(const FVector& ImpactPoint);
 	virtual void HandleDamage(float DamageAmount);
+
+	// 특정 몽타주의 애니메이션을 실행하는 메소드
+	void PlayMontageSection(UAnimMontage* Montage, const FName& SectionName);
+
+	// 랜덤한 몽타주의 애니메이션을 실행하는 메소드
+	int32 PlayRandomMontageSection(UAnimMontage* Montage, const TArray<FName>& SectionNames);
+
+	// 몽타주 실행 메소드
+	virtual int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
+
+	// 캡슐 해제 메소드
+	void DisableCapsule();
+
 	virtual bool CanAttack();
 	bool IsAlive();
 
@@ -60,6 +73,12 @@ protected: // Protected variables
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* DeathMontage;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> AttackMontageSections;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> DeathMontageSections;
 
 	/*
 	* Component variables

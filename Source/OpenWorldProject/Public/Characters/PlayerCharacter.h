@@ -39,7 +39,6 @@ protected:
 	virtual void Attack() override;
 
 	// Montage method
-	virtual void PlayAttackMontage() override;
 	virtual void AttackEnd() override;
 
 	UFUNCTION(BLueprintCallable)

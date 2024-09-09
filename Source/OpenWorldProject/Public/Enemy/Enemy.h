@@ -30,7 +30,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Die() override;
 	virtual void Attack() override;
-	virtual void PlayAttackMontage() override;
+	virtual int32 PlayDeathMontage() override;
 	virtual void HandleDamage(float DamageAmount) override;
 
 	bool InTargetRange(AActor* Target, double Radius);
@@ -124,7 +124,7 @@ private:
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
-	EDeathPose DeathPose;
+	TEnumAsByte<EDeathPose> DeathPose;
 
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
